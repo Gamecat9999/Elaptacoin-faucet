@@ -14,8 +14,8 @@ session = requests.Session()
 
 # Define the login payload
 payload = {
-    'username': 'gamecat999',
-    'password': 'Jbllc100'
+    'username': 'USERNAME_HERE',
+    'password': 'PASSWORD_HERE'
 }
 
 # Log in to the website
