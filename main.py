@@ -1,9 +1,14 @@
+
 from flask import Flask, render_template, request
 import requests
 import time
 import datetime
-
+from rate_limiter import apply_rate_limiter
 app = Flask(__name__)
+
+apply_rate_limiter(app)
+app = Flask(__name__)
+
 
 # Define the login URL and the target URL
 login_url = 'https://wallet.stormsurge.xyz/login'
@@ -14,8 +19,8 @@ session = requests.Session()
 
 # Define the login payload
 payload = {
-    'username': 'USERNAME_HERE',
-    'password': 'PASSWORD_HERE'
+    'username': 'ENTER_USERNAME_HERE',
+    'password': 'ENTER_PASSWORD_HERE'
 }
 
 # Log in to the website
@@ -29,6 +34,9 @@ else:
 
 # Cooldown duration in seconds
 cooldown_duration = 24 * 60 * 60  # 1 day in seconds
+
+# Dictionary to store IP addresses of users who have made requests
+ip_addresses = {}
 
 # Function to get the current timestamp
 def get_timestamp():
@@ -59,6 +67,17 @@ def write_cooldown_data(cooldown_data):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     cooldown_data = read_cooldown_data()
+    user_ip = request.remote_addr
+
+    if user_ip in ip_addresses:
+        timestamp = ip_addresses[user_ip]
+        remaining_time = cooldown_duration - (get_timestamp() - timestamp)
+        if remaining_time > 0:
+            # Calculate remaining time in days, hours, minutes, and seconds
+            days, remainder = divmod(remaining_time, 24 * 60 * 60)
+            hours, remainder = divmod(remainder, 60 * 60)
+            minutes, seconds = divmod(remainder, 60)
+            return f"You are on cooldown for {days} days, {hours} hours, {minutes} minutes, and {seconds} seconds!"
 
     if request.method == 'POST':
         username = request.form.get('username')
@@ -77,8 +96,8 @@ def index():
         # Define the faucet payload
         faucet_payload = {
             'username': username,
-            'password': 'Jbllc100',
-            'address': 'DuckyPolice',
+            'password': 'robbledobble',
+            'address': 'SKibidi sigma',
             'amount': '0.001'  # Set the amount to 1
         }
 
@@ -90,6 +109,10 @@ def index():
             # Add user to cooldown
             cooldown_data[username] = get_timestamp()
             write_cooldown_data(cooldown_data)
+
+            # Add user's IP address to the dictionary
+            ip_addresses[user_ip] = get_timestamp()
+
             return "Faucet transaction successful!"
         else:
             return "Faucet transaction failed!"
@@ -99,3 +122,7 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
+
