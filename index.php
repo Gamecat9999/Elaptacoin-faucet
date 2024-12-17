@@ -70,8 +70,8 @@ function get_faucet_balance() {
     curl_setopt($ch, CURLOPT_URL, 'https://wallet.stormsurge.xyz/login');
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-        'username' => 'gamecat999',
-        'password' => 'Jbllc100'
+        'username' => 'ENTER-ELAP-USERNAME-HERE',
+        'password' => 'ELAP-PASSWORD-HERE'
     ]));
     curl_setopt($ch, CURLOPT_COOKIEJAR, 'cookies.txt');
     curl_setopt($ch, CURLOPT_COOKIEFILE, 'cookies.txt');
@@ -148,8 +148,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 curl_setopt($ch, CURLOPT_URL, $target_url);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
                     'username' => $username,
-                    'password' => 'Jbllc100',
-                    'address' => 'DuckyPolice',
+                    'password' => 'PASS_WORD_HERE',
+                    'address' => 'USERNAMEHERE',
                     'amount' => '0.75',
                 ]));
                 
